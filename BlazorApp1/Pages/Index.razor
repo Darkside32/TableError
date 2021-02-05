@@ -1,8 +1,8 @@
 ﻿@page "/"
 @using BlazorApp1.Services
 @using BlazorApp1.Data;
-@inject IWebPortal portalService
 @inject IJSRuntime JSRuntime
+@inject NavigationManager NavigationManager
 <div class="table-responsive">
     @if (orders == null)
     {
@@ -10,7 +10,7 @@
     }
     else
     {
-        <table id="example" class="table">
+        <table id="example" class="table" >
             <thead>
                 <tr>
                     <th scope="col">Order Number</th>
@@ -21,48 +21,13 @@
                     <th scope="col">Collection Town</th>
                     <th scope="col">Delivery Date</th>
                     <th scope="col">Delivery Town</th>
+                 
                 </tr>
             </thead>
             <tbody>
                 @foreach (var order in orders)
                 {
-
-                    if (selectedOrder != null)
-                    {
-                        if (order.Key == selectedOrder.Key)
-                        {
-
-                            <tr class="selected" @onclick="@(() => SelectedFunction(order.Key))">
-
-                                <th scope="row">1</th>
-                                <td>@order.Cust_Name</td>
-                                <td>@order.Haulier_Name</td>
-                                <td>@order.Driver_Name </td>
-                                <td>@order.CollectionDate.Value.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@order.CollectionTown</td>
-                                <td>@order.DeliveryDate.Value.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@order.DeliveryTown</td>
-                            </tr>
-
-                        }
-                        else
-                        {
-                            <tr class="" @onclick="@(() => SelectedFunction(order.Key))">
-                                <th scope="row">1</th>
-                                <td>@order.Cust_Name</td>
-                                <td>@order.Haulier_Name</td>
-                                <td>@order.Driver_Name </td>
-                                <td>@order.CollectionDate.Value.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@order.CollectionTown</td>
-                                <td>@order.DeliveryDate.Value.ToString("dd/MM/yyyy HH:mm")</td>
-                                <td>@order.DeliveryTown</td>
-                            </tr>
-                        }
-                    }
-                    else
-                    {
-                        <tr class="" @onclick="@(() => SelectedFunction(order.Key))">
-
+                        <tr class="">
                             <th scope="row">1</th>
                             <td>@order.Cust_Name</td>
                             <td>@order.Haulier_Name</td>
@@ -71,15 +36,18 @@
                             <td>@order.CollectionTown</td>
                             <td>@order.DeliveryDate.Value.ToString("dd/MM/yyyy HH:mm")</td>
                             <td>@order.DeliveryTown</td>
+                          
                         </tr>
-                    }
                 }
+
+
             </tbody>
         </table>
     }
 </div>
 
-@code{
+@code
+{
 
     private List<OrderDetails> orders { get; set; }
     public int Selected { get; set; }
@@ -130,6 +98,10 @@
             if (order.Key == key)
             {
                 selectedOrder = order;
+
+              
+
+                NavigationManager.NavigateTo("/Selected/" + key);
             }
         }
     }
